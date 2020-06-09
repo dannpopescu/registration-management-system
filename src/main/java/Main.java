@@ -1,0 +1,320 @@
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+
+    private static GuestsList guestsList;
+
+    private static Scanner scanner;
+
+    public static void main(String[] args) {
+        scanner = new Scanner(System.in);
+
+        int numberOfPlaces = Integer.parseInt(ask("Introduceti numarul de locuri disponibile:"));
+        guestsList = new GuestsList(numberOfPlaces);
+
+        Menu menuCommand = Menu.HELP;
+        Menu.printMenu();
+        while (menuCommand != Menu.QUIT) {
+            String action = ask("\nIntroduceti comanda: (help - Afiseaza lista de comenzi)");
+            try {
+                menuCommand = Menu.valueOf(action.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Comanda invalida. Incearcati din nou.");
+                continue;
+            }
+
+            switch (menuCommand) {
+                case HELP -> Menu.printMenu();
+                case ADD -> add();
+                case CHECK -> check();
+                case REMOVE -> remove();
+                case UPDATE -> update();
+                case GUESTS -> guests();
+                case WAITLIST -> waitlist();
+                case AVAILABLE -> available();
+                case GUESTS_NO -> guest_no();
+                case WAITLIST_NO -> waitlist_no();
+                case SUBSCRIBE_NO -> subscribe_no();
+                case SEARCH -> search();
+                case QUIT -> System.out.println("O zi frumoasa!");
+            }
+        }
+    }
+
+    /**
+     * Register a new person. If the event is not booked up, the person is added
+     * to the guests list, otherwise to the wait list.
+     */
+    private static void add() {
+        System.out.println("Pentru a adauga o noua persoana introduceti datele de mai jos:");
+        String lastName = askLastName();
+        String firstName = askFirstName();
+        String email = askEmail();
+        String phone = askPhone();
+
+        int response = guestsList.add(new Guest(firstName, lastName, email, phone));
+        Notification.showCreateMessage(response);
+    }
+
+    /**
+     * Ask the user how he would like to search for a person in the database:
+     * by name, email or phone, and return the appropriate SearchMode.
+     * @return one of the following SearchModes:
+     *            BY_NAME
+     *            BY_EMAIL
+     *            BY_PHONE
+     */
+    private static SearchMode askSearchMode() {
+        char mode = ask("Alegeti modul de cautare:" +
+                "\n\t\"1\" - Nume si prenume" +
+                "\n\t\"2\" - Email" +
+                "\n\t\"3\" - Numar de telefon (format \"+40733386463\")").charAt(0);
+
+        List<Character> validInputs = List.of('1', '2', '3');
+        while (!validInputs.contains(mode)) {
+            mode = ask("Input invalid. Incercati din nou.").charAt(0);
+        }
+
+        return SearchMode.values()[Character.getNumericValue(mode) - 1];
+    }
+
+    /**
+     * Check if a person is registered for the event (either on the guests list
+     * or on the waitlist) and print the corresponding message.
+     */
+    private static void check() {
+        SearchMode mode = askSearchMode();
+        int responseCode = -1;
+        switch (mode) {
+            case BY_NAME -> {
+                String lastName = askLastName();
+                String firstName = askFirstName();
+                responseCode = guestsList.checkByName(firstName, lastName);
+            }
+            case BY_EMAIL -> {
+                String email = askEmail();
+                responseCode = guestsList.checkByEmail(email);
+            }
+            case BY_PHONE -> {
+                String phone = askPhone();
+                responseCode = guestsList.checkByPhone(phone);
+            }
+        }
+        Notification.showCheckMessage(responseCode);
+    }
+
+    /**
+     * Remove a registered person from the database or print an error message if the
+     * requested guest has not been found.
+     */
+    private static void remove() {
+        SearchMode mode = askSearchMode();
+        int responseCode = -1;
+        switch (mode) {
+            case BY_NAME -> {
+                String lastName = askLastName();
+                String firstName = askFirstName();
+                responseCode = guestsList.removeByName(firstName, lastName);
+            }
+            case BY_EMAIL -> {
+                String email = askEmail();
+                responseCode = guestsList.removeByEmail(email);
+            }
+            case BY_PHONE -> {
+                String phone = askPhone();
+                responseCode = guestsList.removeByPhone(phone);
+            }
+        }
+        Notification.showRemoveMessage(responseCode);
+        if (responseCode == 1) {
+            List<Guest> guests = guestsList.getGuestsList();
+            Guest transferredGuest = guests.get(guests.size() - 1);
+            System.out.println(transferredGuest.getLastName() + " " + transferredGuest.getFirstName() +
+                    "a fost transferat pe lista de participanti.");
+        }
+    }
+
+    /**
+     * Update the personal details of a guest or print an error message if the
+     * requested guest has not been found in the database.
+     */
+    private static void update() {
+        SearchMode mode = askSearchMode();
+        Guest guest = null;
+        switch (mode) {
+            case BY_NAME -> {
+                String lastName = askLastName();
+                String firstName = askFirstName();
+                guest = guestsList.getByName(firstName, lastName);
+            }
+            case BY_EMAIL -> {
+                String email = askEmail();
+                guest = guestsList.getByEmail(email);
+            }
+            case BY_PHONE -> {
+                String phone = askPhone();
+                guest = guestsList.getByPhone(phone);
+            }
+        }
+
+        if (guest == null) {
+            System.out.println("Eroare: Persoana nu este inregistrata.");
+            return;
+        }
+
+        char field = ask("Alegeti campul de actualizat, tastand:" +
+                "\n\t\"1\" - Nume" +
+                "\n\t\"2\" - Prenume" +
+                "\n\t\"3\" - Email" +
+                "\n\t\"4\" - Numar de telefon (format „+40733386463“)").charAt(0);
+
+        List<Character> validInputs = List.of('1', '2', '3', '4');
+        while (!validInputs.contains(field)) {
+            field = ask("Input invalid. Incercati din nou:").charAt(0);
+        }
+
+        switch (field) {
+            case '1' -> {
+                String lastName = askLastName();
+                guest.setLastName(lastName);
+            }
+            case '2' -> {
+                String firstName = askFirstName();
+                guest.setFirstName(firstName);
+            }
+            case '3' -> {
+                String email = askEmail();
+                guest.setEmail(email);
+            }
+            case '4' -> {
+                String phone = askPhone();
+                guest.setPhoneNumber(phone);
+            }
+        }
+        System.out.println("Campul a fost actualizat cu succes.");
+    }
+
+    /**
+     * Search and print the guests that contain the search key in any one of their fields
+     */
+    private static void search() {
+        String searchKey = ask("Introduceti sirul de caractere cautat:");
+        List<Guest> result = guestsList.search(searchKey);
+        if (result.isEmpty()) {
+            System.out.println("Nici o persoana nu corespunde sirului introdus.");
+        } else {
+            printList(result);
+        }
+    }
+
+    /**
+     * Print the persons that are on the guests list
+     */
+    private static void guests() {
+        List<Guest> list = Main.guestsList.getGuestsList();
+        if (list.isEmpty()) {
+            System.out.println("Lista de participanti este goala...");
+        } else {
+            printList(list);
+        }
+    }
+
+    /**
+     * Print the persons that are on the waitlist
+     */
+    private static void waitlist() {
+        List<Guest> list = Main.guestsList.getWaitList();
+        if (list.isEmpty()) {
+            System.out.println("Lista de asteptare este goala...");
+        } else {
+            printList(list);
+        }
+    }
+
+    /**
+     * Print the elements of the list
+     * @param list a List of elements to be printed
+     */
+    private static <E> void printList(List<E> list) {
+        int index = 1;
+        for (E element : list) {
+            System.out.println(index + ". " + element);
+            index++;
+        }
+    }
+
+    /**
+     * Print the number of available places
+     */
+    private static void available() {
+        System.out.println("Numarul de locuri ramase: " + guestsList.getNoAvailablePlaces());
+    }
+
+    /**
+     * Print the number of guests
+     */
+    private static void guest_no() {
+        System.out.println("Numarul de participanti: " + guestsList.getTotalNoParticipants());
+    }
+
+    /**
+     * Print the number of persons on the wait list
+     */
+    private static void waitlist_no() {
+        System.out.println("Numarul de participanti pe lista de asteptare: " + guestsList.getTotalNoWaiting());
+    }
+
+    /**
+     * Print the total number of registered persons
+     */
+    private static void subscribe_no() {
+        System.out.println("Numarul total de persoane: " + guestsList.getTotalNoRegistered());
+    }
+
+    /**
+     * Get the input from the user in the form:
+     * Question:
+     * >>> [...]
+     * @param question to ask the user
+     * @return a String representing the user's input
+     */
+    private static String ask(String question) {
+        System.out.println(question);
+        System.out.print(">>> ");
+        return scanner.nextLine();
+    }
+
+    /**
+     * Prompt the user to enter his first name
+     * @return user's first name
+     */
+    private static String askFirstName() {
+        return ask("Prenume:");
+    }
+
+    /**
+     * Prompt the user to enter his last name
+     * @return user's last name
+     */
+    private static String askLastName() {
+        return ask("Nume:");
+    }
+
+    /**
+     * Prompt the user to enter his email
+     * @return user's email
+     */
+    private static String askEmail() {
+        return ask("Email:");
+    }
+
+    /**
+     * Prompt the user to enter his phone number
+     * @return user's first phone number
+     */
+    private static String askPhone() {
+        return ask("Telefon (format „+40733386463“):");
+    }
+
+}
