@@ -1,5 +1,7 @@
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -20,7 +22,7 @@ public class Main {
             try {
                 menuCommand = Menu.valueOf(action.toUpperCase());
             } catch (IllegalArgumentException e) {
-                System.out.println("Comanda invalida. Incearcati din nou.");
+                System.out.println("Comanda invalida. Incercati din nou.");
                 continue;
             }
 
@@ -71,7 +73,7 @@ public class Main {
                 "\n\t\"2\" - Email" +
                 "\n\t\"3\" - Numar de telefon (format \"+40733386463\")").charAt(0);
 
-        List<Character> validInputs = List.of('1', '2', '3');
+        Set<Character> validInputs = Set.of('1', '2', '3');
         while (!validInputs.contains(mode)) {
             mode = ask("Input invalid. Incercati din nou.").charAt(0);
         }
@@ -141,24 +143,24 @@ public class Main {
      */
     private static void update() {
         SearchMode mode = askSearchMode();
-        Guest guest = null;
+        Optional<Guest> guestOptional = Optional.empty();
         switch (mode) {
             case BY_NAME -> {
                 String lastName = askLastName();
                 String firstName = askFirstName();
-                guest = guestsList.getByName(firstName, lastName);
+                guestOptional = guestsList.getByName(firstName, lastName);
             }
             case BY_EMAIL -> {
                 String email = askEmail();
-                guest = guestsList.getByEmail(email);
+                guestOptional = guestsList.getByEmail(email);
             }
             case BY_PHONE -> {
                 String phone = askPhone();
-                guest = guestsList.getByPhone(phone);
+                guestOptional = guestsList.getByPhone(phone);
             }
         }
 
-        if (guest == null) {
+        if (guestOptional.isEmpty()) {
             System.out.println("Eroare: Persoana nu este inregistrata.");
             return;
         }
@@ -169,7 +171,7 @@ public class Main {
                 "\n\t\"3\" - Email" +
                 "\n\t\"4\" - Numar de telefon (format „+40733386463“)").charAt(0);
 
-        List<Character> validInputs = List.of('1', '2', '3', '4');
+        Set<Character> validInputs = Set.of('1', '2', '3', '4');
         while (!validInputs.contains(field)) {
             field = ask("Input invalid. Incercati din nou:").charAt(0);
         }
@@ -177,19 +179,19 @@ public class Main {
         switch (field) {
             case '1' -> {
                 String lastName = askLastName();
-                guest.setLastName(lastName);
+                guestOptional.get().setLastName(lastName);
             }
             case '2' -> {
                 String firstName = askFirstName();
-                guest.setFirstName(firstName);
+                guestOptional.get().setFirstName(firstName);
             }
             case '3' -> {
                 String email = askEmail();
-                guest.setEmail(email);
+                guestOptional.get().setEmail(email);
             }
             case '4' -> {
                 String phone = askPhone();
-                guest.setPhoneNumber(phone);
+                guestOptional.get().setPhoneNumber(phone);
             }
         }
         System.out.println("Campul a fost actualizat cu succes.");

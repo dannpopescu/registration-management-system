@@ -1,6 +1,7 @@
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 public class GuestsList {
 
@@ -53,7 +54,7 @@ public class GuestsList {
      * @param list in which to search for the elements similar to the key
      * @param key a similar element to the one we are looking for
      * @param comparator for elements comparison
-     * @param <E> TODO complete the description of <E>
+     * @param <E> generic element
      * @return index    of the element that is similar to the key based on the provided comparator
      *            -1    if no similar element has been found
      */
@@ -212,18 +213,19 @@ public class GuestsList {
      * @return Guest    if a similar object has been found in the guests list/waitlist
      *         null     if no similar object has been found
      */
-    private Guest getSimilar(Guest similarGuest, Comparator<Guest> comparator) {
+    private Optional<Guest> getSimilar(Guest similarGuest, Comparator<Guest> comparator) {
         int index = indexOfSimilar(guestsList, similarGuest, comparator);
+        Guest guest = null;
         if (index >= 0) {
-            return guestsList.get(index);
+            guest = guestsList.get(index);
         }
 
         index = indexOfSimilar(waitList, similarGuest, comparator);
         if (index >= 0) {
-            return waitList.get(index);
+            guest = waitList.get(index);
         }
 
-        return null;
+        return Optional.ofNullable(guest);
     }
 
     /**
@@ -234,7 +236,7 @@ public class GuestsList {
      * @return Guest    if a Guest with the provided first and last name has been found
      *         null     if no Guest has been found
      */
-    public Guest getByName(String firstName, String lastName) {
+    public Optional<Guest> getByName(String firstName, String lastName) {
         return getSimilar(new Guest(firstName, lastName, "", ""), Guest.BY_NAME_ORDER);
     }
 
@@ -245,7 +247,7 @@ public class GuestsList {
      * @return Guest    if a Guest with the provided email has been found
      *         null     if no Guest has been found
      */
-    public Guest getByEmail(String email) {
+    public Optional<Guest> getByEmail(String email) {
         return getSimilar(new Guest("", "", email, ""), Guest.BY_EMAIL_ORDER);
     }
 
@@ -256,7 +258,7 @@ public class GuestsList {
      * @return Guest    if a Guest with the provided phone number has been found
      *         null     if no Guest has been found
      */
-    public Guest getByPhone(String phoneNumber) {
+    public Optional<Guest> getByPhone(String phoneNumber) {
         return getSimilar(new Guest("", "", "", phoneNumber), Guest.BY_PHONE_ORDER);
     }
 
