@@ -1,3 +1,6 @@
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -9,11 +12,17 @@ public class Main {
 
     private static Scanner scanner;
 
-    public static void main(String[] args) {
+    private static Path path = Path.of("projects/registrationmanagement/src/main/resources/guestsList.dat");
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         scanner = new Scanner(System.in);
 
-        int numberOfPlaces = Integer.parseInt(ask("Introduceti numarul de locuri disponibile:"));
-        guestsList = new GuestsList(numberOfPlaces);
+        if (Files.exists(path)) {
+            restore();
+        } else {
+            int numberOfPlaces = Integer.parseInt(ask("Introduceti numarul de locuri disponibile:"));
+            guestsList = new GuestsList(numberOfPlaces);
+        }
 
         Menu menuCommand = Menu.HELP;
         Menu.printMenu();
@@ -39,16 +48,38 @@ public class Main {
                 case WAITLIST_NO -> waitlist_no();
                 case SUBSCRIBE_NO -> subscribe_no();
                 case SEARCH -> search();
+                case RESET -> reset();
                 case QUIT -> System.out.println("O zi frumoasa!");
             }
         }
+    }
+
+    public static void persist() throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(path)))) {
+            out.writeObject(guestsList);
+        }
+    }
+
+    public static void restore() throws IOException, ClassNotFoundException {
+        try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(path)))) {
+            guestsList = (GuestsList) in.readObject();
+        }
+    }
+
+    private static void reset() throws IOException {
+        if (Files.exists(path)) {
+            Files.delete(path);
+        }
+        guestsList = new GuestsList(guestsList.getNumberOfPlaces());
+        persist();
+        System.out.println("List a fost resetata cu succes.");
     }
 
     /**
      * Register a new person. If the event is not booked up, the person is added
      * to the guests list, otherwise to the wait list.
      */
-    private static void add() {
+    private static void add() throws IOException {
         System.out.println("Pentru a adauga o noua persoana introduceti datele de mai jos:");
         String lastName = askLastName();
         String firstName = askFirstName();
@@ -56,7 +87,20 @@ public class Main {
         String phone = askPhone();
 
         int response = guestsList.add(new Guest(firstName, lastName, email, phone));
-        Notification.showCreateMessage(response);
+        switch (response) {
+            case 0:
+                System.out.println("Locul la eveniment este confirmat.");
+                persist();
+                break;
+            case -1:
+                System.out.println("Persoana este deja inscrisa pe lista de participanti.");
+                break;
+            default:
+                System.out.println("Persoana a fost inscrisa cu succes pe lista de asteptare si a primit numarul de " +
+                    "ordine " + response + ". Aceasta va fi mutata automat pe lista de participanti da un loc devine disponibil.");
+                persist();
+                break;
+        }
     }
 
     /**
@@ -110,7 +154,7 @@ public class Main {
      * Remove a registered person from the database or print an error message if the
      * requested guest has not been found.
      */
-    private static void remove() {
+    private static void remove() throws IOException {
         SearchMode mode = askSearchMode();
         int responseCode = -1;
         switch (mode) {
@@ -128,12 +172,19 @@ public class Main {
                 responseCode = guestsList.removeByPhone(phone);
             }
         }
-        Notification.showRemoveMessage(responseCode);
-        if (responseCode == 1) {
-            List<Guest> guests = guestsList.getGuestsList();
-            Guest transferredGuest = guests.get(guests.size() - 1);
-            System.out.println(transferredGuest.getLastName() + " " + transferredGuest.getFirstName() +
-                    "a fost transferat pe lista de participanti.");
+        switch (responseCode) {
+            case -1:
+                System.out.println("Eroare: Persoana nu este inscrisa la eveniment.");
+                break;
+            case 0:
+            case 1:
+                System.out.println("Stergerea persoanei s-a realizat cu succes.");
+                List<Guest> guests = guestsList.getGuestsList();
+                Guest transferredGuest = guests.get(guests.size() - 1);
+                System.out.println(transferredGuest.getLastName() + " " + transferredGuest.getFirstName() +
+                        "a fost transferat pe lista de participanti.");
+                persist();
+                break;
         }
     }
 
@@ -141,7 +192,7 @@ public class Main {
      * Update the personal details of a guest or print an error message if the
      * requested guest has not been found in the database.
      */
-    private static void update() {
+    private static void update() throws IOException {
         SearchMode mode = askSearchMode();
         Optional<Guest> guestOptional = Optional.empty();
         switch (mode) {
@@ -194,6 +245,7 @@ public class Main {
                 guestOptional.get().setPhoneNumber(phone);
             }
         }
+        persist();
         System.out.println("Campul a fost actualizat cu succes.");
     }
 

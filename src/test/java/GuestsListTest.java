@@ -3,6 +3,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GuestsListTest {
@@ -290,23 +292,23 @@ class GuestsListTest {
             list.add(guest1);
             list.add(guest2);
 
-            Guest getByNameReturn = list.getByName("alex", "poiana");
-            assertNotNull(getByNameReturn,
+            Optional<Guest> getByNameReturn = list.getByName("alex", "poiana");
+            assertTrue(getByNameReturn.isPresent(),
                     "Method getByName() should return the guest if the provided name matches the guest's name");
 
-            Guest getByEmailReturn = list.getByEmail("alex@gmail.com");
-            assertNotNull(getByEmailReturn,
+            Optional<Guest> getByEmailReturn = list.getByEmail("alex@gmail.com");
+            assertTrue(getByEmailReturn.isPresent(),
                     "Method getByEmail() should return the guest if the provided email matches the guest's email");
 
 
-            Guest getByPhoneReturn = list.getByPhone("+40775534075");
-            assertNotNull(getByPhoneReturn,
+            Optional<Guest> getByPhoneReturn = list.getByPhone("+40775534075");
+            assertTrue(getByPhoneReturn.isPresent(),
                     "Method getByPhone() should return the guest if the provided phone number matches " +
                             "the guest's phone number");
         }
 
         @Test
-        void get_ShouldReturnNull_IfTheArgumentsDontMatchFieldsOfAnyObject() {
+        void get_ShouldReturnEmptyOptional_IfTheArgumentsDontMatchFieldsOfAnyObject() {
             GuestsList list = new GuestsList(1);
             Guest guest1 = new Guest("Vali", "Ionescu", "vali@gmail.com", "+40775534075");
             Guest guest2 = new Guest("Alex", "Poiana", "alex@gmail.com", "+40721234567");
@@ -314,18 +316,18 @@ class GuestsListTest {
             list.add(guest1);
             list.add(guest2);
 
-            Guest getByNameReturn = list.getByName("alex", "ionescu");
-            assertNull(getByNameReturn,
-                    "Method getByName() should return null if the provided name doesn't match the name of any guest");
+            Optional<Guest> getByNameReturn = list.getByName("alex", "ionescu");
+            assertTrue(getByNameReturn.isEmpty(),
+                    "Method getByName() should return empty optional if the provided name doesn't match the name of any guest");
 
-            Guest getByEmailReturn = list.getByEmail("diana@gmail.com");
-            assertNull(getByEmailReturn,
-                    "Method getByEmail() should return null if the provided email doesn't match the email of any guest");
+            Optional<Guest> getByEmailReturn = list.getByEmail("diana@gmail.com");
+            assertTrue(getByEmailReturn.isEmpty(),
+                    "Method getByEmail() should return empty optional if the provided email doesn't match the email of any guest");
 
 
-            Guest getByPhoneReturn = list.getByPhone("+40772314575");
-            assertNull(getByPhoneReturn,
-                    "Method getByPhone() should return null if the provided phone number doesn't match " +
+            Optional<Guest> getByPhoneReturn = list.getByPhone("+40772314575");
+            assertTrue(getByPhoneReturn.isEmpty(),
+                    "Method getByPhone() should return empty optional if the provided phone number doesn't match " +
                             "the phone number of any guest");
         }
     }

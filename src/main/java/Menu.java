@@ -14,6 +14,7 @@ public enum Menu {
     WAITLIST_NO("Numarul de persoane din lista de asteptare"),
     SUBSCRIBE_NO("Numarul total de persoane inscrise"),
     SEARCH("Cauta toti invitatii conform sirului de caractere introdus"),
+    RESET("Sterge complet toate datele stocate"),
     QUIT("Inchide aplicatia");
 
     private final String description;

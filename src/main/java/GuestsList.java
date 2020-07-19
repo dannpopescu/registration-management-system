@@ -1,18 +1,19 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class GuestsList {
+public class GuestsList implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final int numberOfPlaces;
-    private final List<Guest> guestsList;
-    private final List<Guest> waitList;
+    private List<Guest> guestsList = new ArrayList<>();
+    private List<Guest> waitList = new ArrayList<>();
 
     public GuestsList(int numberOfPlaces) {
         this.numberOfPlaces = numberOfPlaces;
-        this.guestsList = new ArrayList<>();
-        this.waitList = new ArrayList<>();
     }
 
     /**
@@ -320,6 +321,14 @@ public class GuestsList {
      */
     public int getTotalNoRegistered() {
         return guestsList.size() + waitList.size();
+    }
+
+    /**
+     * Return the total number of places for the event
+     * @return the total number of places for the event
+     */
+    public int getNumberOfPlaces() {
+        return numberOfPlaces;
     }
 
     /**
