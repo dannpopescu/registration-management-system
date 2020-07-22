@@ -1,3 +1,7 @@
+package com.danpopescu.registrationmanagement;
+
+import com.danpopescu.registrationmanagement.Guest;
+import com.danpopescu.registrationmanagement.GuestsList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -162,7 +166,7 @@ class GuestsListTest {
             int responseByName = list.removeByName("Vali", "Ionescu");
             Assertions.assertAll(
                     () -> assertFalse(list.getGuestsList().contains(guest1),
-                            "Guest with first and last names that match the ones provided as arguments should be " +
+                            "com.danpopescu.registrationmanagement.Guest with first and last names that match the ones provided as arguments should be " +
                                     "deleted from the guests list."),
                     () -> Assertions.assertEquals(0, responseByName,
                             "Method removeByName() should return zero if it deleted a guest from the guests list.")
@@ -171,7 +175,7 @@ class GuestsListTest {
             int responseByEmail = list.removeByEmail("alex@gmail.com");
             Assertions.assertAll(
                     () -> assertFalse(list.getGuestsList().contains(guest2),
-                            "Guest with email that match the one provided as argument should be " +
+                            "com.danpopescu.registrationmanagement.Guest with email that match the one provided as argument should be " +
                                     "deleted from the guests list."),
                     () -> Assertions.assertEquals(0, responseByEmail,
                             "Method removeByEmail() should return true if it deleted a guest from the guests list.")
@@ -180,7 +184,7 @@ class GuestsListTest {
             int responseByPhone = list.removeByPhone("+40751234567");
             Assertions.assertAll(
                     () -> assertFalse(list.getGuestsList().contains(guest2),
-                            "Guest with phone number that match the one provided as argument should be " +
+                            "com.danpopescu.registrationmanagement.Guest with phone number that match the one provided as argument should be " +
                                     "deleted from the guests list."),
                     () -> Assertions.assertEquals(0, responseByPhone,
                             "Method removeByPhone() should return true if it deleted a guest from the guests list.")
@@ -196,7 +200,7 @@ class GuestsListTest {
             int responseByName = list.removeByName("diana", "croitoru");
             Assertions.assertAll(
                     () -> assertFalse(list.getWaitList().contains(guest1),
-                            "Guest with first and last names that match the ones provided as arguments should be " +
+                            "com.danpopescu.registrationmanagement.Guest with first and last names that match the ones provided as arguments should be " +
                                     "deleted from the wait list."),
                     () -> Assertions.assertEquals(0, responseByName,
                             "Method removeByName() should return true if it deleted a guest from the wait list.")
@@ -206,7 +210,7 @@ class GuestsListTest {
             int responseByEmail = list.removeByEmail("diana@gmail.com");
             Assertions.assertAll(
                     () -> assertFalse(list.getWaitList().contains(guest3),
-                            "Guest with email that match the one provided as argument should be " +
+                            "com.danpopescu.registrationmanagement.Guest with email that match the one provided as argument should be " +
                                     "deleted from the wait list."),
                     () -> Assertions.assertEquals(0, responseByEmail,
                             "Method removeByEmail() should return true if it deleted a guest from the wait list.")
@@ -216,7 +220,7 @@ class GuestsListTest {
             int responseByPhone = list.removeByPhone("+40751234567");
             Assertions.assertAll(
                     () -> assertFalse(list.getWaitList().contains(guest3),
-                            "Guest with phone number that match the one provided as argument should be " +
+                            "com.danpopescu.registrationmanagement.Guest with phone number that match the one provided as argument should be " +
                                     "deleted from the wait list."),
                     () -> Assertions.assertEquals(0, responseByPhone,
                             "Method removeByPhone() should return true if it deleted a guest from the wait list.")
@@ -235,7 +239,7 @@ class GuestsListTest {
                             "Method removeByName() should not remove a guest if the name provided doesn't match " +
                                     "with the name of a guest"),
                     () -> assertEquals(2, list.getTotalNoParticipants(),
-                            "Guest list size should remain the same if no guest was removed from the list"),
+                            "com.danpopescu.registrationmanagement.Guest list size should remain the same if no guest was removed from the list"),
                     () -> assertEquals(1, list.getTotalNoWaiting(),
                             "Wait list size should remain the same if no guest was removed from the list")
             );
@@ -246,7 +250,7 @@ class GuestsListTest {
                             "Method removeByEmail() should not remove a guest if the email provided doesn't match " +
                                     "with the email of a guest"),
                     () -> assertEquals(2, list.getTotalNoParticipants(),
-                            "Guest list size should remain the same if no guest was removed from the list"),
+                            "com.danpopescu.registrationmanagement.Guest list size should remain the same if no guest was removed from the list"),
                     () -> assertEquals(1, list.getTotalNoWaiting(),
                             "Wait list size should remain the same if no guest was removed from the list")
             );
@@ -257,7 +261,7 @@ class GuestsListTest {
                             "Method removeByPhone() should not remove a guest if the email provided doesn't match " +
                                     "with the phone number of a guest"),
                     () -> assertEquals(2, list.getTotalNoParticipants(),
-                            "Guest list size should remain the same if no guest was removed from the list"),
+                            "com.danpopescu.registrationmanagement.Guest list size should remain the same if no guest was removed from the list"),
                     () -> assertEquals(1, list.getTotalNoWaiting(),
                             "Wait list size should remain the same if no guest was removed from the list")
             );

@@ -78,12 +78,12 @@ de utilizator.
 Diagrama UML a acestei aplicatii poate fi vizualizata [aici](uml.png) sau la finalul acestui document. Mai jos este
 descrisa structura aplicatiei si modul in care sunt implementate unele functionalitati netriviale.
 
-#### [Main](Main.java)
+#### [Main](src/main/java/com/danpopescu/registrationmanagement/Main.java)
 Interactiunea cu aplicatia are loc prin intermediul clasei Main care continue o instanta a clasei 
 GuestsList si cate o metoda pentru fiecare punct din meniul de mai sus. Fiecare metoda preia input-urile 
 de la utilizator si, in functie de acestea, apeleaza metodele specifice din clasa GuestsList.
 
-#### [Guest](Guest.java) si [GuestTest](../../test/java/GuestTest.java)
+#### [Guest](src/main/java/com/danpopescu/registrationmanagement/Guest.java) si [GuestTest](src/test/java/com/danpopescu/registrationmanagement/GuestTest.java)
 Un obiect de tip Guest reprezinta o persoana care s-a inregistrat pentru eveniment. Acesta va avea campurile nume, prenume,
 email si telefon, cat si getteri si setteri pentru aceste campuri. De asemenea, un obiect de acest tip are metoda
 `anyFieldContains(String)` care verifica si returneaza `true` daca orice camp al acelui obiect contine sirul de caractere
@@ -92,7 +92,7 @@ primit ca parametru.
 Clasa Guest contine si trei *inner clase* care implementeaza interfata Comparator si au rolul de a compara obiectele
 Guest in functie de nume, email sau numar de telefon.
 
-#### [GuestsList](GuestsList.java) si [GuestsListTest](../../test/java/GuestsListTest.java)
+#### [GuestsList](src/main/java/com/danpopescu/registrationmanagement/GuestsList.java) si [GuestsListTest](src/test/java/com/danpopescu/registrationmanagement/GuestsListTest.java)
 Aceasta clasa este inima aplicatiei. Campurile clasei sunt:
 1. un numar intreg care reprezinta numarul de locuri totale la eveniment
 2. doua liste: lista persoanelor care au confirmat un loc si lista persoanelor aflate in asteptare.
@@ -116,16 +116,16 @@ din lista si un comparator al acestor elemente, si returneaza indicele primului 
 ca parametru, unde similaritatea este determinata de comparatorul primit. Cu ajutorul indicelui returnat, implementarea 
 celor trei metode de mai sus este triviala.
 
-#### [Menu](Menu.java)
+#### [Menu](src/main/java/com/danpopescu/registrationmanagement/Menu.java)
 Reprezinta un Enum al comenzilor din meniul principal si descrierea fiecareia.
 
-#### [SearchMode](SearchMode.java)
+#### [SearchMode](src/main/java/com/danpopescu/registrationmanagement/SearchMode.java)
 Reprezinta un Enum al metodelor dupa care pot fi efectuate operatiunile `check`, `remove` si `get`, respectiv:
 * `BY_NAME`
 * `BY_EMAIL`
 * `BY_PHONE`
 
-#### [Notification](Notification.java)
+#### [Notification](src/main/java/com/danpopescu/registrationmanagement/Notification.java)
 O clasa auxiliara folosita pentru a afisa mesajele de succes/eroare dupa apelarea metodelor `add`, `check`, si `remove`
 din clasa Main.
 

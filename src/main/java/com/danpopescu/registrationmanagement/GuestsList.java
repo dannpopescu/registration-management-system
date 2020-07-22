@@ -1,3 +1,5 @@
+package com.danpopescu.registrationmanagement;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -74,7 +76,7 @@ public class GuestsList implements Serializable {
      * Search for a guest similar to the similarGuest in the guests list/waitlist.
      * The similarity is based on the provided comparator.
      * @param similarGuest guest against which the similarity is tested
-     * @param comparator Comparator of Guest objects that will determine if two Guests are similar
+     * @param comparator Comparator of com.danpopescu.registrationmanagement.Guest objects that will determine if two Guests are similar
      * @return an integer with the following meanings:
      *            -1 - no similar guest has been found in the guests list/waitlist
      *             0 - a similar guest is on the guests list
@@ -136,11 +138,11 @@ public class GuestsList implements Serializable {
      * Delete a guest similar to the similarGuest in the guests list/waitlist.
      * The similarity is based on the provided comparator.
      * @param similarGuest guest against which the similarity is tested
-     * @param comparator Comparator of Guest objects that will determine if two Guests are similar
+     * @param comparator Comparator of com.danpopescu.registrationmanagement.Guest objects that will determine if two Guests are similar
      * @return -1   if no similar object has been deleted
-     *          0   if a similar Guest object has been removed from the waitlist OR from guests
+     *          0   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the waitlist OR from guests
      *              list and the waitlist was empty
-     *          1   if a similar Guest object has been removed from the guests list AND the next
+     *          1   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the guests list AND the next
      *              guest on the waitlist was transferred to the guests list
      */
     private int removeSimilar(Guest similarGuest, Comparator<Guest> comparator) {
@@ -170,9 +172,9 @@ public class GuestsList implements Serializable {
      * @param firstName of the guest to be deleted
      * @param lastName of the guest to be deleted
      * @return -1   if no similar object has been deleted
-     *          0   if a similar Guest object has been removed from the waitlist OR from guests
+     *          0   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the waitlist OR from guests
      *              list and the waitlist was empty
-     *          1   if a similar Guest object has been removed from the guests list AND the next
+     *          1   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the guests list AND the next
      *              guest on the waitlist was transferred to the guests list
      */
     public int removeByName(String firstName, String lastName) {
@@ -184,9 +186,9 @@ public class GuestsList implements Serializable {
      * Search is case insensitive.
      * @param email of the guest to be deleted
      * @return -1   if no similar object has been deleted
-     *          0   if a similar Guest object has been removed from the waitlist OR from guests
+     *          0   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the waitlist OR from guests
      *              list and the waitlist was empty
-     *          1   if a similar Guest object has been removed from the guests list AND the next
+     *          1   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the guests list AND the next
      *              guest on the waitlist was transferred to the guests list
      */
     public int removeByEmail(String email) {
@@ -197,9 +199,9 @@ public class GuestsList implements Serializable {
      * Delete a guest from the guests list/waitlist based on the phone number.
      * @param phoneNumber of the guest to be deleted
      * @return -1   if no similar object has been deleted
-     *          0   if a similar Guest object has been removed from the waitlist OR from guests
+     *          0   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the waitlist OR from guests
      *              list and the waitlist was empty
-     *          1   if a similar Guest object has been removed from the guests list AND the next
+     *          1   if a similar com.danpopescu.registrationmanagement.Guest object has been removed from the guests list AND the next
      *              guest on the waitlist was transferred to the guests list
      */
     public int removeByPhone(String phoneNumber) {
@@ -210,8 +212,8 @@ public class GuestsList implements Serializable {
      * Get a guest similar to the similarGuest in the guests list/waitlist.
      * The similarity is based on the provided comparator.
      * @param similarGuest guest against which the similarity is tested
-     * @param comparator Comparator of Guest objects that will determine if two Guests are similar
-     * @return Guest    if a similar object has been found in the guests list/waitlist
+     * @param comparator Comparator of com.danpopescu.registrationmanagement.Guest objects that will determine if two Guests are similar
+     * @return com.danpopescu.registrationmanagement.Guest    if a similar object has been found in the guests list/waitlist
      *         null     if no similar object has been found
      */
     private Optional<Guest> getSimilar(Guest similarGuest, Comparator<Guest> comparator) {
@@ -230,34 +232,34 @@ public class GuestsList implements Serializable {
     }
 
     /**
-     * Get a Guest object from the guests/wait list based on the first and last name.
+     * Get a com.danpopescu.registrationmanagement.Guest object from the guests/wait list based on the first and last name.
      * Search is case insensitive.
      * @param firstName of the searched guest
      * @param lastName of the searched guest
-     * @return Guest    if a Guest with the provided first and last name has been found
-     *         null     if no Guest has been found
+     * @return com.danpopescu.registrationmanagement.Guest    if a com.danpopescu.registrationmanagement.Guest with the provided first and last name has been found
+     *         null     if no com.danpopescu.registrationmanagement.Guest has been found
      */
     public Optional<Guest> getByName(String firstName, String lastName) {
         return getSimilar(new Guest(firstName, lastName, "", ""), Guest.BY_NAME_ORDER);
     }
 
     /**
-     * Get a Guest object from the guests list/waitlist based on the first and last name.
+     * Get a com.danpopescu.registrationmanagement.Guest object from the guests list/waitlist based on the first and last name.
      * Search is case insensitive.
      * @param email of the searched guest
-     * @return Guest    if a Guest with the provided email has been found
-     *         null     if no Guest has been found
+     * @return com.danpopescu.registrationmanagement.Guest    if a com.danpopescu.registrationmanagement.Guest with the provided email has been found
+     *         null     if no com.danpopescu.registrationmanagement.Guest has been found
      */
     public Optional<Guest> getByEmail(String email) {
         return getSimilar(new Guest("", "", email, ""), Guest.BY_EMAIL_ORDER);
     }
 
     /**
-     * Get a Guest object from the guests list/waitlist based on the first and last name.
+     * Get a com.danpopescu.registrationmanagement.Guest object from the guests list/waitlist based on the first and last name.
      * Search is case insensitive.
      * @param phoneNumber of the searched guest
-     * @return Guest    if a Guest with the provided phone number has been found
-     *         null     if no Guest has been found
+     * @return com.danpopescu.registrationmanagement.Guest    if a com.danpopescu.registrationmanagement.Guest with the provided phone number has been found
+     *         null     if no com.danpopescu.registrationmanagement.Guest has been found
      */
     public Optional<Guest> getByPhone(String phoneNumber) {
         return getSimilar(new Guest("", "", "", phoneNumber), Guest.BY_PHONE_ORDER);
@@ -268,7 +270,7 @@ public class GuestsList implements Serializable {
      * in any of their fields.
      * Note: search is case insensitive
      * @param str a String to be looked up
-     * @return a list of Guest if there has been any match, or
+     * @return a list of com.danpopescu.registrationmanagement.Guest if there has been any match, or
      *         an empty list if no match has been found
      */
     public List<Guest> search(String str) {
@@ -333,7 +335,7 @@ public class GuestsList implements Serializable {
 
     /**
      * Return a copy of the guests list
-     * @return a List of Guest who are attending the event
+     * @return a List of com.danpopescu.registrationmanagement.Guest who are attending the event
      */
     public List<Guest> getGuestsList() {
         return new ArrayList<>(guestsList);
@@ -341,7 +343,7 @@ public class GuestsList implements Serializable {
 
     /**
      * Return a copy of the wait list
-     * @return a List of Guest who are on the wait list for the event
+     * @return a List of com.danpopescu.registrationmanagement.Guest who are on the wait list for the event
      */
     public List<Guest> getWaitList() {
         return new ArrayList<>(waitList);

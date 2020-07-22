@@ -1,3 +1,5 @@
+package com.danpopescu.registrationmanagement;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -105,7 +107,7 @@ public class Main {
 
     /**
      * Ask the user how he would like to search for a person in the database:
-     * by name, email or phone, and return the appropriate SearchMode.
+     * by name, email or phone, and return the appropriate com.danpopescu.registrationmanagement.SearchMode.
      * @return one of the following SearchModes:
      *            BY_NAME
      *            BY_EMAIL

@@ -1,5 +1,7 @@
+package com.danpopescu.registrationmanagement;
+
 /**
- * Main menu options
+ * com.danpopescu.registrationmanagement.Main menu options
  */
 public enum Menu {
     HELP("Afiseaza aceasta lista de comenzi"),

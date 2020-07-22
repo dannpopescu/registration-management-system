@@ -1,6 +1,8 @@
+package com.danpopescu.registrationmanagement;
+
 /**
  * Class used to print responses for the user after making ADD, CHECK
- * and REMOVE operations on the GuestsList
+ * and REMOVE operations on the com.danpopescu.registrationmanagement.GuestsList
  */
 public class Notification {
 

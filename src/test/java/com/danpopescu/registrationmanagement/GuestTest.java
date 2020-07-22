@@ -1,3 +1,6 @@
+package com.danpopescu.registrationmanagement;
+
+import com.danpopescu.registrationmanagement.Guest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,3 +1,5 @@
+package com.danpopescu.registrationmanagement;
+
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Objects;
@@ -96,7 +98,7 @@ public class Guest implements Serializable {
     }
 
     /**
-     * Comparator of Guest using the first and last name fields
+     * Comparator of com.danpopescu.registrationmanagement.Guest using the first and last name fields
      */
     private static class NameComparator implements Comparator<Guest> {
         @Override
@@ -110,7 +112,7 @@ public class Guest implements Serializable {
     }
 
     /**
-     * Comparator of Guest using the email field
+     * Comparator of com.danpopescu.registrationmanagement.Guest using the email field
      */
     private static class EmailComparator implements Comparator<Guest> {
         @Override
@@ -120,7 +122,7 @@ public class Guest implements Serializable {
     }
 
     /**
-     * Comparator of Guest using the phoneNumber field
+     * Comparator of com.danpopescu.registrationmanagement.Guest using the phoneNumber field
      */
     private static class PhoneComparator implements Comparator<Guest> {
         @Override
